@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\uni\\2048-proekt\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{254251C6-02F8-469D-AC3F-573A7D49EED8}|2048-proekt\\2048-proekt.vcxproj|D:\\uni\\2048-proekt\\2048-proekt\\2048-proekt.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{254251C6-02F8-469D-AC3F-573A7D49EED8}|2048-proekt\\2048-proekt.vcxproj|solutionrelative:2048-proekt\\2048-proekt.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "2048-proekt.cpp",
+              "DocumentMoniker": "D:\\uni\\2048-proekt\\2048-proekt\\2048-proekt.cpp",
+              "RelativeDocumentMoniker": "2048-proekt\\2048-proekt.cpp",
+              "ToolTip": "D:\\uni\\2048-proekt\\2048-proekt\\2048-proekt.cpp",
+              "RelativeToolTip": "2048-proekt\\2048-proekt.cpp",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAAAG8AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-12T23:38:28.836Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
