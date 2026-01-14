@@ -15,8 +15,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdlib>   
+#include <ctime>     
+#include <iomanip>   
 
-// --- CONSTANTS ---
 const int MAX_BOARD_SIZE = 10;
 const int T_2 = 2;
 const int T_4 = 4;
@@ -25,12 +27,6 @@ const int MAX_NAME_LEN = 100;
 const int MIN_BOARD_SIZE = 4;
 const int CLEAR_SCREEN_LINES = 40;
 const int MAX_PATH_LEN = 64;
-
-const unsigned int RAND_MULTIPLIER = 1103515245;
-const unsigned int RAND_INCREMENT = 12345;
-const unsigned int RAND_MODULUS = 2147483647;
-
-// --- HELPERS ---
 
 int myStrLen(const char* str) {
     int len = 0;
@@ -107,6 +103,89 @@ void makePath(char* buf, int s) {
 int getNextRand(int& seed) {
     seed = (seed * RAND_MULTIPLIER + RAND_INCREMENT) & RAND_MODULUS;
     return seed;
+}
+void spawn(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n) {
+    int emptyCells[MAX_BOARD_SIZE * MAX_BOARD_SIZE][2];
+    int count = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (b[i][j] == 0) {
+                emptyCells[count][0] = i;
+                emptyCells[count][1] = j;
+                count++;
+            }
+        }
+    }
+
+    if (count > 0) {
+        int idx = std::rand() % count;
+        int r = emptyCells[idx][0];
+        int c = emptyCells[idx][1];
+        b[r][c] = (std::rand() % 10 == 0) ? T_4 : T_2;
+    }
+}
+
+void shift(int* line, int n) {
+    int temp[MAX_BOARD_SIZE] = { 0 };
+    int p = 0;
+    for (int i = 0; i < n; i++) {
+        if (line[i] != 0) temp[p++] = line[i];
+    }
+    for (int i = 0; i < p - 1; i++) {
+        if (temp[i] == temp[i + 1] && temp[i] != 0) {
+            temp[i] *= 2;
+            temp[i + 1] = 0;
+            i++;
+        }
+    }
+    int f = 0;
+    for (int i = 0; i < n; i++) line[i] = 0;
+    for (int i = 0; i < p; i++) {
+        if (temp[i] != 0) line[f++] = temp[i];
+    }
+}
+
+bool move(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n, char d) {
+    int old[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) old[i][j] = b[i][j];
+
+    for (int i = 0; i < n; i++) {
+        int line[MAX_BOARD_SIZE] = { 0 };
+        if (d == 'a' || d == 'd') {
+            for (int j = 0; j < n; j++)
+                line[j] = (d == 'a') ? b[i][j] : b[i][n - 1 - j];
+            shift(line, n);
+            for (int j = 0; j < n; j++)
+                if (d == 'a') b[i][j] = line[j];
+                else b[i][n - 1 - j] = line[j];
+        }
+        else if (d == 'w' || d == 's') {
+            for (int j = 0; j < n; j++)
+                line[j] = (d == 'w') ? b[j][i] : b[n - 1 - j][i];
+            shift(line, n);
+            for (int j = 0; j < n; j++)
+                if (d == 'w') b[j][i] = line[j];
+                else b[n - 1 - j][i] = line[j];
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            if (b[i][j] != old[i][j]) return true;
+    return false;
+}
+
+bool canContinue(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (b[i][j] == 0) return true;
+            if (j + 1 < n && b[i][j] == b[i][j + 1]) return true;
+            if (i + 1 < n && b[i][j] == b[i + 1][j]) return true;
+        }
+    }
+    return false;
 }
 int main() {
     while (true) {
