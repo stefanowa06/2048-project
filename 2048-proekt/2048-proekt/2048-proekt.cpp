@@ -95,7 +95,7 @@ void toString(int num, char* str)
 }
 void clear() 
 {
-    for (int i = 0; i < 50; i++) 
+    for (int i = 0; i < CLEAR_SCREEN_LINES; i++) 
     {
         std::cout << std::endl;
     }
