@@ -221,21 +221,27 @@ bool canContinue(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n)
     return false;
 }
 
-void show(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n) 
+void show(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n)
 {
     clear();
     int score = 0;
     for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++) score += b[i][j];
+    {
+        for (int j = 0; j < n; j++)
+        {
+            score += b[i][j];
+        }
+    }
 
     std::cout << "Current Score: " << score << std::endl << std::endl;
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
     {
         std::cout << "|";
-        for (int j = 0; j < n; j++) 
+        for (int j = 0; j < n; j++)
         {
             if (b[i][j] == 0) std::cout << std::setw(6) << ".";
-            else std::cout << std::setw(6) << b[i][j]; 
+            else std::cout << std::setw(6) << b[i][j];
+        }
         std::cout << " |" << std::endl;
     }
 }
@@ -276,11 +282,15 @@ void play()
     }
     show(b, n);
     std::cout << "\nGAME OVER!" << std::endl;
+    std::cout << "Press Enter to return to menu...";
+    std::cin.ignore(); 
+    std::cin.get();    
 }
 int main() 
 {
     while (true)
     {
+        clear();
         std::cout << "1. Start Game" << std::endl;
         std::cout << "2. Leaderboard" << std::endl;
         std::cout << "3. Exit" << std::endl;
