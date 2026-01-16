@@ -245,7 +245,80 @@ void show(int b[MAX_BOARD_SIZE][MAX_BOARD_SIZE], int n)
         std::cout << " |" << std::endl;
     }
 }
+void save(int boardSize, char* currentPlayerName, int currentPlayerScore)
+{
+    char filePath[MAX_PATH_LEN];
+    makePath(filePath, boardSize);
+    char playerNames[LEADERBOARD_LIMIT + 1][MAX_NAME_LEN + 1];
+    int playerScores[LEADERBOARD_LIMIT + 1];
+    int recordsCount = 0;
 
+    std::ifstream inputFile(filePath);
+    if (inputFile)
+    {
+        while (recordsCount < LEADERBOARD_LIMIT && inputFile >> playerNames[recordsCount] >> playerScores[recordsCount])
+        {
+            recordsCount++;
+        }
+        inputFile.close();
+    }
+
+    myStrCpy(playerNames[recordsCount], currentPlayerName);
+    playerScores[recordsCount] = currentPlayerScore;
+    recordsCount++;
+
+    for (int i = 0; i < recordsCount - 1; i++)
+    {
+        for (int j = 0; j < recordsCount - i - 1; j++)
+        {
+            if (playerScores[j] < playerScores[j + 1])
+            {
+                int tempS = playerScores[j];
+                playerScores[j] = playerScores[j + 1];
+                playerScores[j + 1] = tempS;
+                char tempN[MAX_NAME_LEN + 1];
+                myStrCpy(tempN, playerNames[j]);
+                myStrCpy(playerNames[j], playerNames[j + 1]);
+                myStrCpy(playerNames[j + 1], tempN);
+            }
+        }
+    }
+
+    std::ofstream outputFile(filePath);
+    int limit = (recordsCount < LEADERBOARD_LIMIT) ? recordsCount : LEADERBOARD_LIMIT;
+    for (int i = 0; i < limit; i++)
+    {
+        outputFile << playerNames[i] << " " << playerScores[i] << std::endl;
+    }
+}
+
+void top()
+{
+    int size;
+    std::cout << "Enter size to see leaderboard: ";
+    std::cin >> size;
+    char filePath[MAX_PATH_LEN];
+    makePath(filePath, size);
+    std::ifstream inputFile(filePath);
+    clear();
+    std::cout << "--- TOP 5 (" << size << "x" << size << ") ---" << std::endl;
+    if (!inputFile)
+    {
+        std::cout << "No records yet." << std::endl;
+    }
+    else
+    {
+        char n[MAX_NAME_LEN + 1];
+        int p;
+        while (inputFile >> n >> p)
+        {
+            std::cout << std::left << std::setw(15) << n << " - " << p << std::endl;
+        }
+    }
+    std::cout << "\nPress Enter to return...";
+    std::cin.ignore();
+    std::cin.get();
+}
 void play() 
 {
     std::srand(std::time(0)); 
@@ -281,6 +354,10 @@ void play()
         }
     }
     show(b, n);
+    int total = 0;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) total += b[i][j];
+    save(n, name, total);
     std::cout << "\nGAME OVER!" << std::endl;
     std::cout << "Press Enter to return to menu...";
     std::cin.ignore(); 
@@ -304,6 +381,7 @@ int main()
             continue;
         }
         if (ch == 1) play();
+        else if (ch == 2) top();
         else if (ch == 3) break;
     }
     return 0;
